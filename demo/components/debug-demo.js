@@ -25,6 +25,20 @@ class App extends React.Component {
     const chartStyle = { parent: { border: "1px solid #ccc", margin: "2%", maxWidth: "40%" } };
     return (
       <div style={containerStyle}>
+      <VictoryChart style={chartStyle}>
+        <VictoryBar cornerRadius={8}
+          data={[
+            { x: 1, y: 5 },
+            { x: 2, y: 0.1 },
+            { x: 3, y: -0.2 },
+            { x: 4, y: -3 },
+            { x: 5, y: -1 },
+            { x: 6, y: 3 },
+            { x: 7, y: -3 }
+          ]}
+        />
+        </VictoryChart>
+
         <VictoryChart style={chartStyle}
           containerComponent={<VictoryZoomContainer/>}
         >

@@ -55,13 +55,19 @@ export default class Bar extends React.Component {
     const direction = sign > 0 ? "0 0 1" : "0 0 0";
     const topArc = `${cornerRadius.top} ${cornerRadius.top} ${direction}`;
     const bottomArc = `${cornerRadius.bottom} ${cornerRadius.bottom} ${direction}`;
+    const coerceMin = (val, base) => {
+      return sign > 0 ? Math.max(val, base) : Math.min(val, base);
+    };
+    const coerceMax = (val, base) => {
+      return sign > 0 ? Math.min(val, base) : Math.max(val, base);
+    };
     return `M ${x0 + cornerRadius.bottom}, ${y0}
-      A ${bottomArc}, ${x0}, ${y0 - sign * cornerRadius.bottom}
-      L ${x0}, ${y1 + sign * cornerRadius.top}
+      A ${bottomArc}, ${x0}, ${coerceMin(y0 - sign * cornerRadius.bottom, y1)}
+      L ${x0}, ${coerceMax(y1 + sign * cornerRadius.top, y0)}
       A ${topArc}, ${x0 + cornerRadius.top}, ${y1}
       L ${x1 - cornerRadius.top}, ${y1}
-      A ${topArc}, ${x1}, ${y1 + sign * cornerRadius.top}
-      L ${x1}, ${y0 - sign * cornerRadius.bottom}
+      A ${topArc}, ${x1}, ${coerceMax(y1 + sign * cornerRadius.top, y0)}
+      L ${x1}, ${coerceMin(y0 - sign * cornerRadius.bottom, y1)}
       A ${bottomArc}, ${x1 - cornerRadius.bottom}, ${y0}
       z`;
   }
@@ -72,14 +78,20 @@ export default class Bar extends React.Component {
     const direction = sign > 0 ? "0 0 1" : "0 0 0";
     const topArc = `${cornerRadius.top} ${cornerRadius.top} ${direction}`;
     const bottomArc = `${cornerRadius.bottom} ${cornerRadius.bottom} ${direction}`;
+    const coerceMin = (val, base) => {
+      return sign > 0 ? Math.max(val, base) : Math.min(val, base);
+    };
+    const coerceMax = (val, base) => {
+      return sign > 0 ? Math.min(val, base) : Math.max(val, base);
+    };
     return `M ${y0}, ${x1 + sign * cornerRadius.bottom}
-      A ${bottomArc}, ${y0 + cornerRadius.bottom}, ${x1}
-      L ${y1 - sign * cornerRadius.top}, ${x1}
+      A ${bottomArc}, ${coerceMax(y0 + cornerRadius.bottom, y1)}, ${x1}
+      L ${coerceMin(y1 - sign * cornerRadius.top, y0)}, ${x1}
       A ${topArc}, ${y1}, ${x1 + cornerRadius.top}
       L ${y1}, ${x0 - cornerRadius.top}
-      A ${topArc}, ${y1 - sign * cornerRadius.top}, ${x0}
-      L ${y0 + cornerRadius.bottom}, ${x0 }
-      A ${bottomArc}, ${y0}, ${x0 - sign * cornerRadius.bottom}
+      A ${topArc}, ${coerceMin(y1 - sign * cornerRadius.top, y0)}, ${x0}
+      L ${coerceMax(y0 + cornerRadius.bottom, y1)}, ${x0}
+      A ${bottomArc}, ${y0}, ${Math.min(x0 - sign * cornerRadius.bottom, (x0 - sign * width / 2))}
       z`;
   }
 
