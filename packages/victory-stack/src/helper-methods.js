@@ -102,7 +102,6 @@ function getCalculatedProps(props, childComponents) {
   const role = "stack";
   const style = Wrapper.getStyle(props.theme, props.style, role);
   const horizontal = Helpers.isHorizontal(props);
-  props = assign({ horizontal }, props);
   const categories = {
     x: Wrapper.getCategories(props, "x"),
     y: Wrapper.getCategories(props, "y")
@@ -112,8 +111,8 @@ function getCalculatedProps(props, childComponents) {
     return React.cloneElement(c, { data: datasets[i] });
   });
   const domain = {
-    x: Wrapper.getDomain(assign({}, props, { categories }), "x", children),
-    y: Wrapper.getDomain(assign({}, props, { categories }), "y", children)
+    x: Wrapper.getDomain(assign({}, props, { categories, horizontal }), "x", children),
+    y: Wrapper.getDomain(assign({}, props, { categories, horizontal }), "y", children)
   };
   const range = {
     x: Helpers.getRange(props, "x"),

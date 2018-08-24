@@ -56,32 +56,7 @@ class App extends React.Component {
     const chartStyle = { parent: { border: "1px solid #ccc", margin: "2%", maxWidth: "40%" } };
     return (
       <div style={containerStyle}>
-        <VictoryChart
-          style={chartStyle}
-        >
-          <VictoryBar
-            horizontal
-            alignment="start"
-            data={[
-              { x: 2, y: "Echo" },
-              { x: 6, y: "Foxtrot" },
-              { x: 3, y: "Golf" },
-              { x: 4, y: "Hotel" }
-            ]}
-          />
-        </VictoryChart>
-        <VictoryChart style={chartStyle}>
-          <VictoryBar horizontal
-            data={lowToHigh}
-            sortKey={`sort`}
-          />
-        </VictoryChart>
-        <VictoryChart style={chartStyle}>
-          <VictoryBar horizontal
-            data={highToLow}
-            sortKey={`sort`}
-          />
-        </VictoryChart>
+
 
         <VictoryChart style={chartStyle} domainPadding={{ x: 50 }}>
             <VictoryGroup offset={20} style={{ data: { width: 15 } }}>

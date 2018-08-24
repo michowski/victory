@@ -50,6 +50,7 @@ export default {
       const dataset = (props.data || props.y) && Data.getData(props);
       const dataDomain = dataset ? Domain.getDomainFromData(props, axis, dataset) : [];
       const childDomain = this.getDomainFromChildren(props, axis, childComponents);
+      debugger;
       const min = minDomain || Collection.getMinValue([...dataDomain, ...childDomain]);
       const max = maxDomain || Collection.getMaxValue([...dataDomain, ...childDomain]);
       domain = Domain.getDomainFromMinMax(min, max);
