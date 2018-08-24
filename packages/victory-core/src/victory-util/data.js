@@ -218,7 +218,8 @@ function generateData(props) {
  * @returns {Array} an array of categories
  */
 function getCategories(props, axis) {
-  const currentAxis = Helpers.getCurrentAxis(axis, props.horizontal);
+  const horizontal = Helpers.isHorizontal(props);
+  const currentAxis = Helpers.getCurrentAxis(axis, horizontal);
   return props.categories && !Array.isArray(props.categories) ?
     props.categories[currentAxis] : props.categories;
 }

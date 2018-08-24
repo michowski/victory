@@ -9,7 +9,7 @@ function getAxisProps(child, props, calculatedProps) {
   const { domain, scale, originSign, stringMap, categories, horizontal } = calculatedProps;
   const childProps = child.props || {};
   const axis = child.type.getAxis(childProps);
-  const currentAxis = Axis.getCurrentAxis(axis, horizontal);
+  const currentAxis = Helpers.getCurrentAxis(axis, horizontal);
   const otherAxis = axis === "x" ? "y" : "x";
   const axisOffset = getAxisOffset(props, calculatedProps);
   const offsetY = axis === "y" ? undefined : axisOffset.y;
@@ -56,9 +56,7 @@ function getStyles(props) {
 
 function getCalculatedProps(props, childComponents) {
   const style = getStyles(props);
-  const horizontal = childComponents.some((component) => {
-    return component.props && component.props.horizontal;
-  });
+  const horizontal = Helpers.isHorizontal(props);
   // TODO: check
   const categories = {
     x: Wrapper.getCategories(props, "x", childComponents),
@@ -115,7 +113,7 @@ function getChildren(props, childComponents, calculatedProps) {
   calculatedProps = calculatedProps || getCalculatedProps(props, childComponents);
   const baseStyle = calculatedProps.style.parent;
   const { height, polar, theme, width } = props;
-  const { origin } = calculatedProps;
+  const { origin, horizontal } = calculatedProps;
   const parentName = props.name || "chart";
   return childComponents.map((child, index) => {
     const role = child.type && child.type.role;
@@ -125,7 +123,7 @@ function getChildren(props, childComponents, calculatedProps) {
     const childProps = getChildProps(child, props, calculatedProps);
     const name = child.props.name || `${parentName}-${role}-${index}`;
     const newProps = defaults({
-      height, polar, theme, width, style, name,
+      height, polar, theme, width, style, name, horizontal,
       origin: polar ? origin : undefined,
       padding: calculatedProps.padding,
       key: `${name}-key-${index}`,

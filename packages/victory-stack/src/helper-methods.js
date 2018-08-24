@@ -101,9 +101,8 @@ function getCalculatedProps(props, childComponents) {
   childComponents = childComponents || React.Children.toArray(props.children);
   const role = "stack";
   const style = Wrapper.getStyle(props.theme, props.style, role);
-  const horizontal = props.horizontal || childComponents.every(
-    (component) => component.props.horizontal
-  );
+  const horizontal = Helpers.isHorizontal(props);
+  props = assign({ horizontal }, props);
   const categories = {
     x: Wrapper.getCategories(props, "x"),
     y: Wrapper.getCategories(props, "y")

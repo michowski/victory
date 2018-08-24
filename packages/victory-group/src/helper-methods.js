@@ -17,9 +17,7 @@ function getCalculatedProps(props, childComponents) {
   const style = Wrapper.getStyle(props.theme, props.style, role);
   const modifiedProps = Helpers.modifyProps(props, fallbackProps);
   const { offset, colorScale, color, polar } = modifiedProps;
-  const horizontal = modifiedProps.horizontal || childComponents.every(
-    (component) => component.props && component.props.horizontal
-  );
+  const horizontal = Helpers.isHorizontal(modifiedProps);
   const categories = {
     x: Wrapper.getCategories(modifiedProps, "x"),
     y: Wrapper.getCategories(modifiedProps, "y")
@@ -56,10 +54,7 @@ function pixelsToValue(props, axis, calculatedProps) {
   if (!props.offset) {
     return 0;
   }
-  const childComponents = React.Children.toArray(props.children);
-  const horizontalChildren = childComponents.some((child) => child.props.horizontal);
-  const horizontal = props && props.horizontal || horizontalChildren.length > 0;
-  const currentAxis = Helpers.getCurrentAxis(axis, horizontal);
+  const currentAxis = Helpers.getCurrentAxis(axis, calculatedProps.horizontal);
   const domain = calculatedProps.domain[currentAxis];
   const range = calculatedProps.range[currentAxis];
   const domainExtent = Math.max(...domain) - Math.min(...domain);

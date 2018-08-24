@@ -21,10 +21,7 @@ export default {
   },
 
   getDefaultDomainPadding(props, axis, childComponents) {
-    const horizontalChildren = childComponents.some((component) => {
-      return component.props && component.props.horizontal;
-    });
-    const horizontal = props && props.horizontal || horizontalChildren;
+    const horizontal = Helpers.isHorizontal(props);
     const groupComponent = childComponents.filter((child) => {
       return child.type && child.type.role && child.type.role === "group";
     });
@@ -137,11 +134,6 @@ export default {
   getDomainFromChildren(props, axis, childComponents) { // eslint-disable-line max-statements, complexity, max-len
     const children = childComponents ?
       childComponents.slice(0) : React.Children.toArray(props.children);
-    const horizontalChildren = childComponents.some((component) => {
-      return component.props && component.props.horizontal;
-    });
-    const horizontal = props && props.horizontal || horizontalChildren.length > 0;
-    const currentAxis = Axis.getCurrentAxis(axis, horizontal);
     const parentData = props.data ? Data.getData(props, axis) : undefined;
     const { polar, startAngle, endAngle, categories, minDomain, maxDomain } = props;
     const baseParentProps = { polar, startAngle, endAngle, categories, minDomain, maxDomain };
@@ -153,9 +145,9 @@ export default {
       if (!Domain.isDomainComponent(child)) {
         return null;
       } else if (child.type && isFunction(child.type.getDomain)) {
-        return child.props && child.type.getDomain(sharedProps, currentAxis);
+        return child.props && child.type.getDomain(sharedProps, axis);
       } else {
-        return Domain.getDomain(sharedProps, currentAxis);
+        return Domain.getDomain(sharedProps, axis);
       }
     };
     const childDomains = Helpers.reduceChildren(children, iteratee, props);

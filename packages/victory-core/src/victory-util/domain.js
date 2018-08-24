@@ -211,7 +211,7 @@ function getDomainFromCategories(props, axis, categories) {
  */
 function getDomainFromData(props, axis, dataset) {
   dataset = dataset || Data.getData(props);
-  const { horizontal, polar, startAngle = 0, endAngle = 360 } = props;
+  const { polar, startAngle = 0, endAngle = 360 } = props;
   const minDomain = getMinFromProps(props, axis);
   const maxDomain = getMaxFromProps(props, axis);
   if (dataset.length < 1) {
@@ -220,6 +220,7 @@ function getDomainFromData(props, axis, dataset) {
     const max = maxDomain !== undefined ? maxDomain : Collection.getMaxValue(scaleDomain);
     return getDomainFromMinMax(min, max);
   }
+  const horizontal = Helpers.isHorizontal(props);
   const currentAxis = Helpers.getCurrentAxis(axis, horizontal);
   const min = minDomain !== undefined ? minDomain : getExtremeFromData(dataset, currentAxis, "min");
   const max = maxDomain !== undefined ? maxDomain : getExtremeFromData(dataset, currentAxis, "max");
@@ -280,7 +281,8 @@ function getDomainWithZero(props, axis) {
     return propsDomain;
   }
   const ensureZero = (domain) => {
-    const currentAxis = Helpers.getCurrentAxis(axis, props.horizontal);
+    const horizontal = Helpers.isHorizontal(props);
+    const currentAxis = Helpers.getCurrentAxis(axis, horizontal);
     const minDomain = getMinFromProps(props, axis);
     const maxDomain = getMaxFromProps(props, axis);
     if (currentAxis === "x") {
