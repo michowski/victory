@@ -220,6 +220,7 @@ function generateData(props) {
 function getCategories(props, axis) {
   const horizontal = Helpers.isHorizontal(props);
   const currentAxis = Helpers.getCurrentAxis(axis, horizontal);
+  // const currentAxis = axis;
   return props.categories && !Array.isArray(props.categories) ?
     props.categories[currentAxis] : props.categories;
 }

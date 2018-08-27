@@ -246,7 +246,10 @@ export default {
       if (!Domain.isDomainComponent(child) || !childProps.categories) {
         return null;
       } else {
-        return Data.getStringsFromCategories(childProps, axis);
+        const categories = childProps.categories && !Array.isArray(childProps.categories) ?
+          childProps.categories[axis] : childProps.rops.categories;
+        const categoryStrings = categories && categories.filter((val) => typeof val === "string");
+        return categoryStrings ? Collection.removeUndefined(categoryStrings) : [];
       }
     };
     return Helpers.reduceChildren(childComponents.slice(0), iteratee);
@@ -270,9 +273,11 @@ export default {
   },
 
   getStringsFromChildren(props, axis, childComponents) {
+    const horizontal = Helpers.isHorizontal(props);
+    const currentAxis = Helpers.getCurrentAxis(axis, horizontal);
     childComponents = childComponents || React.Children.toArray(props.children);
     const categories = isPlainObject(props.categories) ? props.categories[axis] : props.categories;
-    const axisComponent = Axis.getAxisComponent(childComponents, axis);
+    const axisComponent = Axis.getAxisComponent(childComponents, currentAxis);
     const axisStrings = axisComponent ? Data.getStringsFromAxes(axisComponent.props, axis) : [];
     const categoryStrings = categories || this.getStringsFromCategories(childComponents, axis);
     const dataStrings = this.getStringsFromData(childComponents, axis);
@@ -280,7 +285,9 @@ export default {
   },
 
   getCategories(props, axis) {
-    const categories = Data.getCategories(props, axis) || this.getStringsFromChildren(props, axis);
+    const propCategories = props.categories && !Array.isArray(props.categories) ?
+    props.categories[axis] : props.categories;
+    const categories = propCategories || this.getStringsFromChildren(props, axis);
     return categories.length > 0 ? categories : undefined;
   }
 };
