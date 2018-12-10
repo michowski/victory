@@ -1,4 +1,4 @@
-import React from "react";
+git import React from "react";
 import PropTypes from "prop-types";
 import VictoryPortal from "../victory-portal/victory-portal";
 import CustomPropTypes from "../victory-util/prop-types";
@@ -20,6 +20,7 @@ const defaultStyles = {
 export default class VictoryLabel extends React.Component {
   static displayName = "VictoryLabel";
   static role = "label";
+  static defaultStyles = defaultStyles;
   static propTypes = {
     active: PropTypes.bool,
     angle: PropTypes.oneOfType([
