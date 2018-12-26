@@ -289,23 +289,38 @@ function getDomainWithZero(props, axis) {
   if (propsDomain) {
     return propsDomain;
   }
+
+  const dataset = Data.getData(props);
+  const y0Initial = dataset && dataset[0] ? dataset[0]._y0 : 0;
+  const y0Min = dataset.reduce((min, datum) => {
+    return datum._y0 < min ? datum._y0 : min;
+  }, y0Initial);
+
   const ensureZero = (domain) => {
     const currentAxis = Helpers.getCurrentAxis(axis, props.horizontal);
-    const minDomain = getMinFromProps(props, axis);
-    const maxDomain = getMaxFromProps(props, axis);
     if (currentAxis === "x") {
       return domain;
     }
-    const defaultMin = minDomain || 0;
-    const defaultMax = maxDomain || 0;
-    const min = minDomain !== undefined ? minDomain : Collection.getMinValue(domain, defaultMin);
-    const max = maxDomain !== undefined ? maxDomain : Collection.getMaxValue(domain, defaultMax);
+
+    const defaultMin = y0Min !== undefined ? y0Min : 0;
+    const maxDomainProp = getMaxFromProps(props, axis);
+    const minDomainProp = getMinFromProps(props, axis);
+    const max = maxDomainProp !== undefined ? maxDomainProp : Collection.getMaxValue(domain, 0);
+    const min =
+      minDomainProp !== undefined ? minDomainProp : Collection.getMinValue(domain, defaultMin);
+
     return getDomainFromMinMax(min, max);
   };
+
+  const getDomainFunction = () => {
+    return getDomainFromData(props, axis, dataset);
+  };
+
   const formatDomainFunction = (domain) => {
     return formatDomain(ensureZero(domain), props, axis);
   };
-  return createDomainFunction(null, formatDomainFunction)(props, axis);
+
+  return createDomainFunction(getDomainFunction, formatDomainFunction)(props, axis);
 }
 
 /**
